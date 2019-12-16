@@ -1,0 +1,63 @@
+#!/usr/bin/env fift -s
+"TonUtil.fif" include
+"Asm.fif" include
+
+variable updated_storage
+
+{ { ."success " cr } { "test failed" abort } cond } : test_ret_value
+{ swap 0= test_ret_value } : test_code
+{ { ."success " cr } { " contract state error: " abort } cond } : test_state
+
+true constant bounce
+0 constant amount
+"build/00-new-pure" constant file-base
+file-base +".addr" load-address 2constant dest_addr
+
+
+"build/00-pure-code.fif" include <s
+constant code
+
+<b 0 1 i, b> constant initial_storage
+
+// [ magic:0x076ef1ea actions:Integer msgs_sent:Integer
+// unixtime:Integer block_lt:Integer trans_lt:Integer
+// rand_seed:Integer balance_remaining:[Integer (Maybe Cell)]
+// myself:MsgAddressInt global_config:(Maybe Cell)
+// ] = SmartContractInfo;
+
+0 tuple 0x076ef1ea , // magic
+0 , 0 , // actions msg_sents
+1570470873 , // unix_time
+1 , 1 , 0 , // block_lt, trans_lt, rand_seed
+0 tuple 9223372036854775807 , dictnew , , // remaining balance
+dest_addr nip , dictnew , // contract_address, global_config
+1 tuple // wrap to another tuple
+constant c7
+
+// test # 0 external message
+<b b>
+<s constant ext_msg_body  
+<b b{1000100} s, dest_addr addr, 0 Gram, b{00} s, ext_msg_body s, b> constant ext_message
+
+ext_msg_body recv_external code initial_storage c7 runvmctx
+test_code
+dup updated_storage !
+boc>B <b b> boc>B B= test_state
+
+// test # 1 intenal message without body
+<b b> 
+<s constant int_msg_body  
+<b b{0100} s, bounce 1 i, b{000100} s, dest_addr addr, amount Gram, 0 9 64 32 + + 1+ u, int_msg_body s, b>  constant int_message
+
+int_message int_msg_body recv_internal code updated_storage @ c7 runvmctx
+test_code
+boc>B updated_storage @ boc>B B= test_state
+
+// test # 2 intenal message requested to set code
+<b b> 
+<s constant int_msg_body  
+<b b{0100} s, bounce 1 i, b{000100} s, dest_addr addr, amount Gram, 0 9 64 32 + + 1+ u, int_msg_body s, b>  constant int_message
+
+int_message int_msg_body recv_internal code updated_storage @ c7 runvmctx
+test_code
+boc>B updated_storage @ boc>B B= test_state
