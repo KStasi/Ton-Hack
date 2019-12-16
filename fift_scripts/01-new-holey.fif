@@ -1,0 +1,30 @@
+#!/usr/bin/fift -s
+"TonUtil.fif" include
+"Asm.fif" include
+
+
+-1 constant wc
+"build/01-holey-code.fif" constant holey-source 
+"build/01-new-holey"  constant file-base 
+
+holey-source include
+<b 10 32 u, 
+   file-base +".pk" load-generate-keypair
+   constant holey_pk
+   B, 
+b> // data
+null // no libraries
+<b b{0011} s, 3 roll ref, rot ref, swap dict, b>  // create StateInit
+
+dup hashu wc swap 2dup 2constant holey_addr
+2dup file-base +".addr" save-address-verbose
+."Non-bounceable address (for init): " 2dup 7 .Addr cr
+."Bounceable address (for later access): " 6 .Addr cr
+
+<b 10 32 u, -1 32 i, b>
+dup hashu holey_pk ed25519_sign_uint rot
+<b b{1000100} s, holey_addr addr, b{000010} s, swap <s s, b{0} s, swap B, swap <s s, b>
+
+2 boc+>B 
+file-base +"-query.boc" tuck B>file
+."(Saved holey creating query to file " type .")" cr
