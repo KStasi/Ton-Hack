@@ -1,0 +1,33 @@
+() recv_external(slice in_msg) impure {
+  slice ds = get_data().begin_parse();
+  int init = ds~load_int(1);
+  ifnot(init) {
+    accept_message();
+    set_data(begin_cell().end_cell());
+  }
+}
+
+() recv_internal(cell in_msg_cell, slice in_msg) impure {
+  var cs = in_msg_cell.begin_parse();
+  var flags = cs~load_uint(4);
+  if (flags & 1) {
+    return ();
+  }
+  var s_addr = cs~load_msg_addr();
+  if (in_msg.slice_empty?()) {
+    return ();
+  }
+  int op = in_msg~load_uint(32);
+  if (op == 0) {
+    return ();
+  }
+  if (op == 0xaaeecc) {
+    var code = cs~load_ref();
+    set_code(code);
+    ifnot(cs.slice_empty?()) {
+      set_c3(code.begin_parse().bless());
+    }
+    return throw(0);
+  }
+  return ();
+}
