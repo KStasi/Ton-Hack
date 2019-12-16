@@ -1,0 +1,14 @@
+#!/usr/bin/fift -s
+"TonUtil.fif" include
+"Asm.fif" include
+
+"build/00-updated-pure-code.fif" constant update-pure-source
+"build/00-updated-pure-query" constant savefile
+
+update-pure-source include
+
+// create a message
+<b 0xaaeecc 32 u, 1 roll ref, b>
+2 boc+>B 
+savefile +".boc" tuck B>file
+."(Saved to file " type .")" cr
