@@ -7,7 +7,7 @@
 "build/02-new-generous"  constant file-base 
 
 generous-source include
-<b 0 1 u, b> // data
+<b 2 2 u, b> // data
 null // no libraries
 <b b{0011} s, 3 roll ref, rot ref, swap dict, b>  // create StateInit
 
@@ -16,7 +16,7 @@ dup hashu wc swap 2dup 2constant generous_addr
 ."Non-bounceable address (for init): " 2dup 7 .Addr cr
 ."Bounceable address (for later access): " 6 .Addr cr
 
-<b b{1000100} s, generous_addr addr, b{000010} s, swap <s s, b{0} s, b>
+<b b{1000100} s, generous_addr addr, b{000010} s, swap <s s, b{0} s, 2 2 u, b>
 
 2 boc+>B 
 file-base +"-query.boc" tuck B>file

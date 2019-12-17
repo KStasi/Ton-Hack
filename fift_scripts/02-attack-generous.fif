@@ -7,12 +7,9 @@
 "build/01-new-holey"  constant dest-base 
 
 file-base +".addr" load-address 2constant generous_addr
-dest-base +".addr" load-address 2constant dest_addr
+dest-base +".addr" load-address constant dest_addr constant wc
 
-
-<b b{1000100} s, generous_addr addr, 0 Gram, b{00} s,
-   128 8 u,
-   dest_addr addr, b>
+<b b{1000100} s, generous_addr addr, 0 Gram, b{00} s, 1 2 u, 128 8 u, wc 8 i, dest_addr 256 u, b>
 
 2 boc+>B 
 savefile +"-query.boc" tuck B>file
