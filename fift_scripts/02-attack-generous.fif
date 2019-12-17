@@ -1,0 +1,19 @@
+#!/usr/bin/fift -s
+"TonUtil.fif" include
+"Asm.fif" include
+
+"build/02-attack-generous" constant savefile 
+"build/02-new-generous"  constant file-base 
+"build/01-new-holey"  constant dest-base 
+
+file-base +".addr" load-address 2constant generous_addr
+dest-base +".addr" load-address 2constant dest_addr
+
+
+<b b{1000100} s, generous_addr addr, 0 Gram, b{00} s,
+   128 8 u,
+   dest_addr addr, b>
+
+2 boc+>B 
+savefile +"-query.boc" tuck B>file
+."(Saved generous creating query to file " type .")" cr

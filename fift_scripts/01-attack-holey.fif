@@ -6,7 +6,6 @@
 "build/01-new-holey"  constant file-base 
 
 file-base +".addr" load-address 2constant holey_addr
-file-base +".pk" load-keypair nip constant wallet_pk
 
 <b 12 32 u, now 10000 + 32 u, b>
 <b b{1000100} s, holey_addr addr, 0 Gram, b{00} s,
