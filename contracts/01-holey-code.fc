@@ -23,8 +23,6 @@
   set_data(begin_cell().store_uint(stored_seqno + 1, 32).store_uint(public_key, 256).end_cell());
 }
 
-;; add your code here	
 int seqno() method_id {
   return get_data().begin_parse().preload_uint(32);
 }
-;;
