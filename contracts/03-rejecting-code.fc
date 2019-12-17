@@ -1,0 +1,25 @@
+() recv_internal(int msg_value, cell in_msg_cell, slice in_msg) impure {
+  var cs = in_msg_cell.begin_parse();
+  cs~skip_bits(4);
+  var s_addr = cs~load_msg_addr();
+  if (msg_value) {
+    var msg = begin_cell()
+      .store_uint(0x10, 6)
+      .store_slice(s_addr)
+      .store_grams(msg_value)
+      .store_uint(0, 1 + 4 + 4 + 64 + 32 + 1 + 1)
+      .end_cell();
+    send_raw_message(msg, 0);
+  }
+}
+
+() recv_external(slice in_msg) impure {
+  slice ds = get_data().begin_parse();
+  int init = ds~load_int(1);
+  ds.end_parse();
+  ifnot(init) {
+    accept_message();
+    set_data(begin_cell()
+      .end_cell());
+  }
+}
