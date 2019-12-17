@@ -1,0 +1,23 @@
+#!/usr/bin/fift -s
+"TonUtil.fif" include
+"Asm.fif" include
+
+-1 constant wc
+"build/02-generous-code.fif" constant generous-source 
+"build/02-new-generous"  constant file-base 
+
+generous-source include
+<b 0 1 u, b> // data
+null // no libraries
+<b b{0011} s, 3 roll ref, rot ref, swap dict, b>  // create StateInit
+
+dup hashu wc swap 2dup 2constant generous_addr
+2dup file-base +".addr" save-address-verbose
+."Non-bounceable address (for init): " 2dup 7 .Addr cr
+."Bounceable address (for later access): " 6 .Addr cr
+
+<b b{1000100} s, generous_addr addr, b{000010} s, swap <s s, b{0} s, b>
+
+2 boc+>B 
+file-base +"-query.boc" tuck B>file
+."(Saved generous creating query to file " type .")" cr
