@@ -1,4 +1,6 @@
 # Ton-Hack
+**NOTE** Just in case we can's submit 2 repos in telegram bot.\
+Also see our second submission [dota2 autochess but bring your own figures](https://github.com/copperbasin/dota2_autochess_but_bring_your_own_figures/)
 ## What is it? ##
 
 This is set of contest-like and/or education-like smart contracts for junior-middle ton smart-contract developers. \
