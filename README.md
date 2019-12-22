@@ -7,7 +7,7 @@ This is set of contest-like and/or education-like smart contracts for junior-mid
 It can be used in different formats:
   * Tutorial ([see example](https://www.notion.so/Lesson-1-Spaceship-34bd9fc6f2d44495b42a7584fb8267ca) ; [repository here](https://github.com/KStasi/Ton-Espace))
   * [Ethernauts](https://ethernaut.openzeppelin.com/)-like
-  * CTF (capture the flag) contest as low-middle-difficulty tasks
+  * CTF (capture the flag) contest as low-middle difficulty tasks
 
 ## What's inside these folders? ##
 
